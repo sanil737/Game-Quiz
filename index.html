@@ -1,52 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Game Quiz</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div id="app">
-    <!-- Ad Space -->
-    <div class="ad-banner">ADVERTISEMENT</div>
-
-    <!-- START SCREEN -->
-    <div id="setup-screen" class="card">
-        <h1>🎮 Game Quiz</h1>
-        <input type="text" id="username" placeholder="PLAYER NAME">
-        <div class="game-grid">
-            <button onclick="startGame('freefire')">Free Fire</button>
-            <button onclick="startGame('coc')">CoC</button>
-            <button onclick="startGame('pubg')">PUBG</button>
-            <button onclick="startGame('chess')">Chess</button>
-            <button onclick="startGame('roblox')">Roblox</button>
-            <button onclick="startGame('amongus')">Among Us</button>
-        </div>
+<!-- Inside the Quiz Screen Card -->
+<div id="quiz-screen" class="card hidden">
+    <div class="stats-bar">
+        <div class="coin-pill">💰 <span id="coin-count">10</span></div>
+        <div>Score: <span id="score-count">0</span></div>
     </div>
+    
+    <div id="difficulty-tag"></div>
 
-    <!-- QUIZ SCREEN -->
-    <div id="quiz-screen" class="card hidden">
-        <div class="stats-bar">
-            <div class="coin-pill">💰 <span id="coin-count">10</span></div>
-            <div>Score: <span id="score-count">0</span></div>
-        </div>
-        
-        <div id="difficulty-tag" style="color: #aaa; font-size: 0.8rem; text-transform: uppercase;"></div>
+    <!-- The Boxy Question Area -->
+    <div class="question-container">
         <h2 id="question-text">Loading...</h2>
-        
-        <div id="options-container">
-            <!-- Options will appear here -->
-        </div>
-        
-        <div class="hint-container">
-            <button class="hint-btn" onclick="useHint('50-50')">50/50 (-5💰)</button>
-            <button class="hint-btn" onclick="useHint('textual')">Hint (-3💰)</button>
-        </div>
+    </div>
+    
+    <!-- The 2x2 Grid Area -->
+    <div id="options-container"></div>
+    
+    <div class="hint-container">
+        <button class="hint-btn" onclick="useHint('50-50')">50/50 (-5💰)</button>
+        <button class="hint-btn" onclick="useHint('textual')">Hint (-3💰)</button>
     </div>
 </div>
-
-<script src="game.js"></script>
-</body>
-</html>
