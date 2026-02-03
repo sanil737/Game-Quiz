@@ -1,23 +1,153 @@
-body {
-    background: #121212;
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
-    margin: 0;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+:root {
+    --primary: #8a2be2;
+    --secondary: #ff007f;
+    --accent: #ffd700;
+    --bg: #0f0c29;
+    --card-bg: rgba(255, 255, 255, 0.05);
 }
-.hidden { display: none; }
-.ad-container { background: #222; height: 60px; line-height: 60px; margin-bottom: 20px; }
-input { padding: 12px; border-radius: 5px; border: none; width: 80%; margin-bottom: 20px; }
-.game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
+
+body {
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#app {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Glass Card Effect */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    text-align: center;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    background: linear-gradient(to right, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Input Styling */
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid var(--primary);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 25px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Game Grid Buttons */
+.game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
 button {
-    background: #e91e63;
+    background: linear-gradient(45deg, var(--primary), #4b0082);
     color: white;
     border: none;
     padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 12px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
 }
-button:active { transform: scale(0.95); }
-.stats { display: flex; justify-content: space-around; padding: 10px; background: #333; }
-#options-container { display: flex; flex-direction: column; gap: 10px; padding: 20px; }
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+}
+
+button:active { transform: translateY(0); }
+
+/* Quiz Screen Specifics */
+.stats-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.coin-pill {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--accent);
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+}
+
+#question-text {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    margin: 20px 0;
+    min-height: 60px;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 10px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.option-btn:hover {
+    background: var(--primary);
+}
+
+.hint-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.hint-btn {
+    background: transparent;
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+.hidden { display: none; }
+
+/* Banner Ad Area */
+.ad-banner {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    color: #666;
+}
