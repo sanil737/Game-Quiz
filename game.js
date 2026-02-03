@@ -3,34 +3,58 @@ let score = 0;
 let questions = [];
 let currentIndex = 0;
 
+// Difficulty Order Logic
+const difficultyOrder = { "Very Easy": 1, "Easy": 2, "Normal": 3, "Hard": 4 };
+
 async function startGame(gameName) {
     const user = document.getElementById('username').value;
     if(!user) return alert("Please enter your name!");
 
-    // Hide setup, show quiz
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('quiz-screen').classList.remove('hidden');
 
-    // Fetch questions from your repo
     try {
+        // Fetch from the questions folder
         const response = await fetch(`./questions/${gameName}.json`);
-        questions = await response.json();
+        if (!response.ok) throw new Error("File not found");
+        
+        let data = await response.json();
+
+        // SORT QUESTIONS: Very Easy -> Easy -> Normal -> Hard
+        questions = data.sort((a, b) => {
+            return (difficultyOrder[a.difficulty] || 99) - (difficultyOrder[b.difficulty] || 99);
+        });
+
         showQuestion();
     } catch (e) {
-        alert("Error loading questions. Make sure the JSON files exist in /questions folder.");
+        console.error(e);
+        alert("Error: Make sure 'questions/" + gameName + ".json' exists in your GitHub!");
+        location.reload();
     }
 }
 
 function showQuestion() {
     const q = questions[currentIndex];
-    document.getElementById('question-text').innerText = q.question;
-    document.getElementById('difficulty-tag').innerText = `Difficulty: ${q.difficulty}`;
     
+    // Display Question and Difficulty
+    document.getElementById('question-text').innerText = q.question;
+    
+    // Modern Difficulty Tag
+    const diffTag = document.getElementById('difficulty-tag');
+    diffTag.innerText = q.difficulty;
+    
+    // Color code the difficulty
+    if(q.difficulty === "Very Easy") diffTag.style.color = "#00ff88"; // Green
+    else if(q.difficulty === "Easy") diffTag.style.color = "#00d4ff"; // Blue
+    else if(q.difficulty === "Normal") diffTag.style.color = "#ffcc00"; // Yellow
+    else diffTag.style.color = "#ff4444"; // Red
+
     const container = document.getElementById('options-container');
     container.innerHTML = '';
     
     q.options.forEach(opt => {
         const btn = document.createElement('button');
+        btn.classList.add('option-btn'); // Uses the good design CSS
         btn.innerText = opt;
         btn.onclick = () => checkAnswer(opt, q.answer);
         container.appendChild(btn);
@@ -41,9 +65,9 @@ function checkAnswer(selected, correct) {
     if(selected === correct) {
         score += 10;
         coins += 1;
-        alert("Correct! +1 Coin");
+        alert("Correct! 🎉");
     } else {
-        alert("Wrong! The answer was: " + correct);
+        alert("Wrong! The correct answer was: " + correct);
     }
     
     currentIndex++;
@@ -51,12 +75,26 @@ function checkAnswer(selected, correct) {
         showQuestion();
         updateDisplay();
     } else {
-        alert("Quiz Finished! Final Score: " + score);
-        location.reload(); // Restart
+        alert("Level Cleared! Your Score: " + score);
+        location.reload();
     }
 }
 
 function updateDisplay() {
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('score-count').innerText = score;
+}
+
+function useHint(type) {
+    const q = questions[currentIndex];
+    if (type === 'textual' && coins >= 3) {
+        coins -= 3;
+        alert("HINT: " + q.hints.textual);
+    } else if (type === '50-50' && coins >= 5) {
+        coins -= 5;
+        alert("The answer is one of these: " + q.hints['50-50'].join(" or "));
+    } else {
+        alert("Not enough coins!");
+    }
+    updateDisplay();
 }
