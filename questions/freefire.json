@@ -1,0 +1,32 @@
+[
+  {
+    "question": "Which character has the 'Drop the Beat' ability?",
+    "options": ["Alok", "Chrono", "K", "Kelly"],
+    "answer": "Alok",
+    "difficulty": "Very Easy",
+    "hints": {
+      "50-50": ["Alok", "K"],
+      "textual": "He is a famous DJ."
+    }
+  },
+  {
+    "question": "What is the maximum number of players in a classic Battle Royale match?",
+    "options": ["40", "50", "60", "100"],
+    "answer": "50",
+    "difficulty": "Easy",
+    "hints": {
+      "50-50": ["50", "60"],
+      "textual": "Half of a hundred."
+    }
+  },
+  {
+    "question": "Which map features the 'Pochinok' location?",
+    "options": ["Bermuda", "Purgatory", "Kalahari", "Alpine"],
+    "answer": "Bermuda",
+    "difficulty": "Normal",
+    "hints": {
+      "50-50": ["Bermuda", "Alpine"],
+      "textual": "It is the first and most famous map."
+    }
+  }
+]
