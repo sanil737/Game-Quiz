@@ -1,115 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pro Game Quiz</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Quiz</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-default">
+<body>
 
-<div id="app">
-    <!-- STICKY PROFILE BAR -->
-    <header class="profile-bar">
-        <div class="user-info">
-            <div class="avatar" id="avatar">?</div>
-            <div class="user-meta">
-                <span id="player-name">Guest</span>
-                <span class="rank-badge" id="rank-badge">Beginner 🟢</span>
-            </div>
-        </div>
-        <div class="coin-display">
-            <span class="coin-icon">💰</span>
-            <span id="coin-count">10</span>
-        </div>
-    </header>
+<!-- HOME SCREEN -->
+<section id="home-screen" class="screen active">
+  <div class="logo-area">
+    <h1 class="glitch" data-text="GAME QUIZ">GAME QUIZ</h1>
+    <p class="subtitle">Test your Game IQ</p>
+  </div>
 
-    <!-- HOME SCREEN -->
-    <section id="home-screen" class="screen">
-        <h1 class="glitch">GAME QUIZ</h1>
-        <div class="input-group">
-            <input type="text" id="username-input" placeholder="Enter Player Name..." autocomplete="off">
-            <p class="helper-text">Enter name to unlock games</p>
-        </div>
+  <div class="profile-setup card">
+    <input type="text" id="username-input" placeholder="ENTER PLAYER NAME">
+    <p class="status-text" id="status-text">Enter name to unlock missions</p>
+  </div>
 
-        <div id="resume-container" class="hidden">
-            <button class="resume-btn" onclick="resumeGame()">Continue Last Game ⏩</button>
-        </div>
+  <div class="game-grid">
+    <div class="game-card locked" data-game="freefire" style="--color:#ff4e00">
+      <div class="badge">🔥 Popular</div>
+      <h3>Free Fire</h3>
+      <p>100+ Questions</p>
+    </div>
 
-        <div class="game-grid" id="game-grid">
-            <div class="game-card locked" onclick="selectGame('freefire')" data-game="freefire">
-                <div class="card-content">
-                    <h3>Free Fire</h3>
-                    <span>100+ Questions</span>
-                </div>
-            </div>
-            <div class="game-card locked" onclick="selectGame('coc')" data-game="coc">
-                <div class="card-content">
-                    <h3>CoC</h3>
-                    <span>80+ Questions</span>
-                </div>
-            </div>
-            <div class="game-card locked" onclick="selectGame('pubg')" data-game="pubg">
-                <div class="card-content">
-                    <h3>PUBG</h3>
-                    <span>50+ Questions</span>
-                </div>
-            </div>
-            <div class="game-card locked" onclick="selectGame('roblox')" data-game="roblox">
-                <div class="card-content">
-                    <h3>Roblox</h3>
-                    <span>Normal Mode</span>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="game-card locked" data-game="coc" style="--color:#a044ff">
+      <h3>Clash of Clans</h3>
+      <p>Strategy Quiz</p>
+    </div>
 
-    <!-- QUIZ SCREEN -->
-    <section id="quiz-screen" class="screen hidden">
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div class="quiz-header">
-            <span id="difficulty-badge" class="badge">EASY</span>
-            <span id="q-progress">Q 1/10</span>
-        </div>
+    <div class="game-card locked" data-game="pubg" style="--color:#ffce00">
+      <h3>PUBG</h3>
+      <p>Battle Royale</p>
+    </div>
+  </div>
+</section>
 
-        <div class="question-box">
-            <h2 id="question-text">Loading question...</h2>
-        </div>
+<!-- QUIZ SCREEN -->
+<section id="quiz-screen" class="screen">
+  <div class="top-bar">
+    <span id="player-name"></span>
+    <span id="coins">💰 5</span>
+  </div>
 
-        <div id="options-grid" class="options-grid">
-            <!-- Options A, B, C, D will be injected here -->
-        </div>
+  <p class="level">LEVEL: Easy</p>
 
-        <div class="hint-section">
-            <button class="hint-btn" onclick="useHint('50-50')">✂️ 50/50 (-5)</button>
-            <button class="hint-btn" onclick="useHint('textual')">💡 Hint (-3)</button>
-        </div>
-    </section>
+  <div class="question-card">
+    <h2 id="question-text"></h2>
+  </div>
 
-    <!-- RESULT SCREEN -->
-    <section id="result-screen" class="screen hidden">
-        <div class="card result-card">
-            <h2>QUIZ COMPLETE!</h2>
-            <div class="final-stats">
-                <div class="stat-item">
-                    <span class="label">Score</span>
-                    <span class="value" id="final-score">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="label">Accuracy</span>
-                    <span class="value" id="final-accuracy">0%</span>
-                </div>
-            </div>
-            <button class="game-btn main-btn" onclick="location.reload()">Back to Home</button>
-        </div>
-    </section>
+  <div class="options">
+    <button class="option" onclick="selectAnswer(0)"></button>
+    <button class="option" onclick="selectAnswer(1)"></button>
+    <button class="option" onclick="selectAnswer(2)"></button>
+    <button class="option" onclick="selectAnswer(3)"></button>
+  </div>
 
-    <div class="ad-placeholder">ADVERTISEMENT</div>
-</div>
+  <div class="hints">
+    <button onclick="use5050()">50/50 (-5)</button>
+    <button onclick="useHint()">Hint (-3)</button>
+  </div>
+</section>
 
 <script src="game.js"></script>
 </body>
