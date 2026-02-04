@@ -5,8 +5,31 @@
     "answer": "Alok",
     "difficulty": "Very Easy",
     "hints": {
-      "50-50": ["Alok", "K"],
-      "textual": "He is a famous DJ."
+      "50-50": ["Alok", "Chrono"],
+      "textual": "He is a world-famous Brazilian DJ.",
+      "first_letter": "A"
+    }
+  },
+  {
+    "question": "What is the primary currency used to buy the Elite Pass?",
+    "options": ["Gold", "Diamonds", "Coins", "Tokens"],
+    "answer": "Diamonds",
+    "difficulty": "Very Easy",
+    "hints": {
+      "50-50": ["Diamonds", "Gold"],
+      "textual": "It is the premium blue currency.",
+      "first_letter": "D"
+    }
+  },
+  {
+    "question": "Which pet provides you with a Gloo Wall if you have none?",
+    "options": ["Falco", "Ottero", "Mr. Waggor", "Robo"],
+    "answer": "Mr. Waggor",
+    "difficulty": "Easy",
+    "hints": {
+      "50-50": ["Mr. Waggor", "Falco"],
+      "textual": "It is a penguin wearing a suitcase.",
+      "first_letter": "M"
     }
   },
   {
@@ -15,18 +38,75 @@
     "answer": "50",
     "difficulty": "Easy",
     "hints": {
-      "50-50": ["50", "60"],
-      "textual": "Half of a hundred."
+      "50-50": ["50", "100"],
+      "textual": "Half of a hundred.",
+      "first_letter": "5"
     }
   },
   {
-    "question": "Which map features the 'Pochinok' location?",
+    "question": "Which map features the location 'Pochinok'?",
     "options": ["Bermuda", "Purgatory", "Kalahari", "Alpine"],
     "answer": "Bermuda",
     "difficulty": "Normal",
     "hints": {
-      "50-50": ["Bermuda", "Alpine"],
-      "textual": "It is the first and most famous map."
+      "50-50": ["Bermuda", "Kalahari"],
+      "textual": "It's the very first map of Free Fire.",
+      "first_letter": "B"
+    }
+  },
+  {
+    "question": "Which character is inspired by the footballer Cristiano Ronaldo?",
+    "options": ["Jota", "Chrono", "Luqueta", "Kenta"],
+    "answer": "Chrono",
+    "difficulty": "Normal",
+    "hints": {
+      "50-50": ["Chrono", "Luqueta"],
+      "textual": "He creates a blue time-turner shield.",
+      "first_letter": "C"
+    }
+  },
+  {
+    "question": "What is the name of the high-damage sniper that uses specialized ammo?",
+    "options": ["SKS", "AWM", "VSS", "Kar98k"],
+    "answer": "AWM",
+    "difficulty": "Normal",
+    "hints": {
+      "50-50": ["AWM", "Kar98k"],
+      "textual": "It is only found in Air Drops.",
+      "first_letter": "A"
+    }
+  },
+  {
+    "question": "What is the maximum level a Vest can reach in a match?",
+    "options": ["Level 2", "Level 3", "Level 4", "Level 5"],
+    "answer": "Level 4",
+    "difficulty": "Hard",
+    "hints": {
+      "50-50": ["Level 3", "Level 4"],
+      "textual": "You can use an Armor Upgrader to reach this level.",
+      "first_letter": "L"
+    }
+  },
+  {
+    "question": "Which character has the passive ability 'Dash' which increases sprinting speed?",
+    "options": ["Moco", "Kelly", "Olivia", "Paloma"],
+    "answer": "Kelly",
+    "difficulty": "Hard",
+    "hints": {
+      "50-50": ["Kelly", "Moco"],
+      "textual": "She is an athlete/runner.",
+      "first_letter": "K"
+    }
+  },
+  {
+    "question": "Which weapon is known as the 'One Tap' king in Clash Squad?",
+    "options": ["MP40", "M1887", "Desert Eagle", "Thompson"],
+    "answer": "Desert Eagle",
+    "difficulty": "Hard",
+    "hints": {
+      "50-50": ["Desert Eagle", "MP40"],
+      "textual": "It is a powerful pistol.",
+      "first_letter": "D"
     }
   }
 ]
