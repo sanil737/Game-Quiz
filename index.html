@@ -2,50 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pro Game Quiz</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="theme-default">
 
 <div id="app">
-    <!-- PROFILE HEADER -->
-    <div class="profile-card">
+    <!-- STICKY PROFILE BAR -->
+    <header class="profile-bar">
         <div class="user-info">
-            <div class="avatar" id="avatar-init">?</div>
-            <div>
-                <div id="display-name" style="font-weight: bold;">Guest</div>
-                <div style="font-size: 0.7rem; color: #aaa;">Pro Player</div>
+            <div class="avatar" id="avatar">?</div>
+            <div class="user-meta">
+                <span id="player-name">Guest</span>
+                <span class="rank-badge" id="rank-badge">Beginner 🟢</span>
             </div>
         </div>
-        <div style="color: #ffd700; font-weight: bold;">💰 <span id="coin-count">10</span></div>
-    </div>
-
-    <!-- START SCREEN -->
-    <div id="setup-screen" class="card">
-        <h1>GAME QUIZ</h1>
-        <input type="text" id="username" placeholder="ENTER NAME">
-        <div id="game-list">
-            <button class="game-btn" onclick="startGame('freefire')">FREE FIRE</button>
-            <button class="game-btn" onclick="startGame('coc')">CLASH OF CLANS</button>
-            <button class="game-btn" onclick="startGame('pubg')">PUBG</button>
+        <div class="coin-display">
+            <span class="coin-icon">💰</span>
+            <span id="coin-count">10</span>
         </div>
-    </div>
+    </header>
+
+    <!-- HOME SCREEN -->
+    <section id="home-screen" class="screen">
+        <h1 class="glitch">GAME QUIZ</h1>
+        <div class="input-group">
+            <input type="text" id="username-input" placeholder="Enter Player Name..." autocomplete="off">
+            <p class="helper-text">Enter name to unlock games</p>
+        </div>
+
+        <div id="resume-container" class="hidden">
+            <button class="resume-btn" onclick="resumeGame()">Continue Last Game ⏩</button>
+        </div>
+
+        <div class="game-grid" id="game-grid">
+            <div class="game-card locked" onclick="selectGame('freefire')" data-game="freefire">
+                <div class="card-content">
+                    <h3>Free Fire</h3>
+                    <span>100+ Questions</span>
+                </div>
+            </div>
+            <div class="game-card locked" onclick="selectGame('coc')" data-game="coc">
+                <div class="card-content">
+                    <h3>CoC</h3>
+                    <span>80+ Questions</span>
+                </div>
+            </div>
+            <div class="game-card locked" onclick="selectGame('pubg')" data-game="pubg">
+                <div class="card-content">
+                    <h3>PUBG</h3>
+                    <span>50+ Questions</span>
+                </div>
+            </div>
+            <div class="game-card locked" onclick="selectGame('roblox')" data-game="roblox">
+                <div class="card-content">
+                    <h3>Roblox</h3>
+                    <span>Normal Mode</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- QUIZ SCREEN -->
-    <div id="quiz-screen" class="hidden">
-        <div id="difficulty-tag" style="font-size: 0.7rem; color: #ffd700; margin-bottom: 5px;"></div>
-        <div class="question-container">
-            <h2 id="question-text">Loading...</h2>
+    <section id="quiz-screen" class="screen hidden">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
         </div>
         
-        <div id="options-container"></div>
-        
-        <div style="display: flex; gap: 10px; margin-top: 30px; justify-content: center;">
-            <button class="game-btn" style="width: auto; padding: 10px 20px; background: #333;" onclick="useHint('50-50')">50/50 (-5💰)</button>
-            <button class="game-btn" style="width: auto; padding: 10px 20px; background: #333;" onclick="useHint('textual')">Hint (-3💰)</button>
+        <div class="quiz-header">
+            <span id="difficulty-badge" class="badge">EASY</span>
+            <span id="q-progress">Q 1/10</span>
         </div>
-    </div>
+
+        <div class="question-box">
+            <h2 id="question-text">Loading question...</h2>
+        </div>
+
+        <div id="options-grid" class="options-grid">
+            <!-- Options A, B, C, D will be injected here -->
+        </div>
+
+        <div class="hint-section">
+            <button class="hint-btn" onclick="useHint('50-50')">✂️ 50/50 (-5)</button>
+            <button class="hint-btn" onclick="useHint('textual')">💡 Hint (-3)</button>
+        </div>
+    </section>
+
+    <!-- RESULT SCREEN -->
+    <section id="result-screen" class="screen hidden">
+        <div class="card result-card">
+            <h2>QUIZ COMPLETE!</h2>
+            <div class="final-stats">
+                <div class="stat-item">
+                    <span class="label">Score</span>
+                    <span class="value" id="final-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">Accuracy</span>
+                    <span class="value" id="final-accuracy">0%</span>
+                </div>
+            </div>
+            <button class="game-btn main-btn" onclick="location.reload()">Back to Home</button>
+        </div>
+    </section>
+
+    <div class="ad-placeholder">ADVERTISEMENT</div>
 </div>
 
 <script src="game.js"></script>
