@@ -1,98 +1,177 @@
-let coins = localStorage.getItem('total_coins') ? parseInt(localStorage.getItem('total_coins')) : 10;
-let score = 0;
-let questions = [];
-let currentIndex = 0;
-
-// Update profile on load
-window.onload = function() {
-    const savedName = localStorage.getItem('quiz_username');
-    if (savedName) {
-        document.getElementById('username').value = savedName;
-        updateProfileUI(savedName);
-    }
-    updateDisplay();
+let state = {
+    playerName: localStorage.getItem('quiz_user') || "",
+    coins: parseInt(localStorage.getItem('quiz_coins')) || 10,
+    currentGame: null,
+    questions: [],
+    currentIndex: 0,
+    score: 0
 };
 
-function updateProfileUI(name) {
-    document.getElementById('display-name').innerText = name;
-    document.getElementById('avatar-init').innerText = name.charAt(0).toUpperCase();
+// INITIALIZE
+window.onload = () => {
+    if(state.playerName) {
+        document.getElementById('username-input').value = state.playerName;
+        unlockGames();
+        updateProfile();
+    }
+    checkResume();
+};
+
+document.getElementById('username-input').oninput = (e) => {
+    state.playerName = e.target.value;
+    localStorage.setItem('quiz_user', state.playerName);
+    state.playerName.length > 2 ? unlockGames() : lockGames();
+    updateProfile();
+};
+
+function unlockGames() {
+    document.querySelectorAll('.game-card').forEach(c => c.classList.remove('locked'));
+    document.querySelector('.helper-text').innerText = "Pick a game to start! 🔥";
 }
 
-async function startGame(gameName) {
-    const nameInput = document.getElementById('username').value;
-    if(!nameInput) return alert("Enter Name!");
+function lockGames() {
+    document.querySelectorAll('.game-card').forEach(c => c.classList.add('locked'));
+}
 
-    localStorage.setItem('quiz_username', nameInput);
-    updateProfileUI(nameInput);
+function updateProfile() {
+    document.getElementById('player-name').innerText = state.playerName || "Guest";
+    document.getElementById('avatar').innerText = state.playerName ? state.playerName[0].toUpperCase() : "?";
+    document.getElementById('coin-count').innerText = state.coins;
+    
+    // Level Badge Logic
+    let badge = "Beginner 🟢";
+    if(state.coins > 50) badge = "Pro 🔵";
+    if(state.coins > 150) badge = "Legend 🟣";
+    document.getElementById('rank-badge').innerText = badge;
+}
 
-    document.getElementById('setup-screen').classList.add('hidden');
-    document.getElementById('quiz-screen').classList.remove('hidden');
-
+// GAME ENGINE
+async function selectGame(gameId) {
+    state.currentGame = gameId;
+    document.body.className = `theme-${gameId}`;
+    
     try {
-        const response = await fetch(`./questions/${gameName}.json`);
-        questions = await response.json();
-        showQuestion();
+        const res = await fetch(`./questions/${gameId}.json`);
+        const data = await res.json();
+        
+        // Sorting Logic: Very Easy -> Hard
+        const diffs = {"Very Easy": 1, "Easy": 2, "Normal": 3, "Hard": 4};
+        state.questions = data.sort((a,b) => diffs[a.difficulty] - diffs[b.difficulty]);
+        
+        startQuiz();
     } catch (e) {
-        alert("Error: Check if questions/" + gameName + ".json exists!");
-        location.reload();
+        alert("Error loading " + gameId + ".json. Check your questions folder!");
     }
+}
+
+function startQuiz() {
+    document.getElementById('home-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    showQuestion();
 }
 
 function showQuestion() {
-    const q = questions[currentIndex];
-    document.getElementById('question-text').innerText = q.question;
-    document.getElementById('difficulty-tag').innerText = "LEVEL: " + q.difficulty;
+    const q = state.questions[state.currentIndex];
+    
+    // Save Progress
+    saveProgress();
 
-    const container = document.getElementById('options-container');
+    // UI Updates
+    document.getElementById('question-text').innerText = q.question;
+    document.getElementById('difficulty-badge').innerText = q.difficulty;
+    document.getElementById('q-progress').innerText = `Q ${state.currentIndex + 1}/${state.questions.length}`;
+    document.getElementById('progress-bar').style.width = `${((state.currentIndex) / state.questions.length) * 100}%`;
+
+    const container = document.getElementById('options-grid');
     container.innerHTML = '';
     const labels = ['A', 'B', 'C', 'D'];
 
-    q.options.forEach((opt, index) => {
-        const btn = document.createElement('div');
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
         btn.className = 'option-btn';
-        btn.innerHTML = `<span class="option-label">${labels[index]}:</span> ${opt}`;
-        btn.onclick = () => checkAnswer(opt, q.answer);
+        btn.innerHTML = `<span style="color:var(--gold);margin-right:10px">${labels[i]}:</span> ${opt}`;
+        btn.onclick = () => handleAnswer(btn, opt, q.answer);
         container.appendChild(btn);
     });
 }
 
-function checkAnswer(selected, correct) {
-    if(selected === correct) {
-        score += 10;
-        coins += 1;
-        alert("Correct! 🎉");
-    } else {
-        alert("Wrong! Answer was: " + correct);
-    }
-    
-    // Save coins to profile
-    localStorage.setItem('total_coins', coins);
-    updateDisplay();
+function handleAnswer(btn, selected, correct) {
+    const allBtns = document.querySelectorAll('.option-btn');
+    allBtns.forEach(b => b.style.pointerEvents = 'none');
 
-    currentIndex++;
-    if(currentIndex < questions.length) {
-        showQuestion();
+    if(selected === correct) {
+        btn.classList.add('correct');
+        state.score += 10;
+        state.coins += 1;
+        vibrate(50);
     } else {
-        alert("Game Complete! Final Score: " + score);
-        location.reload();
+        btn.classList.add('wrong');
+        vibrate([100, 50, 100]);
+        // Highlight correct one
+        allBtns.forEach(b => {
+            if(b.innerText.includes(correct)) b.classList.add('correct');
+        });
+    }
+
+    localStorage.setItem('quiz_coins', state.coins);
+    updateProfile();
+
+    setTimeout(() => {
+        state.currentIndex++;
+        if(state.currentIndex < state.questions.length) {
+            showQuestion();
+        } else {
+            finishQuiz();
+        }
+    }, 1500);
+}
+
+function saveProgress() {
+    const data = {
+        game: state.currentGame,
+        index: state.currentIndex,
+        score: state.score
+    };
+    localStorage.setItem('quiz_resume_data', JSON.stringify(data));
+}
+
+function checkResume() {
+    const saved = localStorage.getItem('quiz_resume_data');
+    if(saved) {
+        document.getElementById('resume-container').classList.remove('hidden');
     }
 }
 
-function updateDisplay() {
-    document.getElementById('coin-count').innerText = coins;
+async function resumeGame() {
+    const saved = JSON.parse(localStorage.getItem('quiz_resume_data'));
+    state.currentIndex = saved.index;
+    state.score = saved.score;
+    selectGame(saved.game);
+    document.getElementById('resume-container').classList.add('hidden');
+}
+
+function finishQuiz() {
+    localStorage.removeItem('quiz_resume_data');
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    document.getElementById('final-score').innerText = state.score;
+    document.getElementById('final-accuracy').innerText = Math.round((state.score / (state.questions.length * 10)) * 100) + "%";
 }
 
 function useHint(type) {
-    const q = questions[currentIndex];
-    if (type === '50-50' && coins >= 5) {
-        coins -= 5;
-        alert("Options: " + q.hints['50-50'].join(" or "));
-    } else if (type === 'textual' && coins >= 3) {
-        coins -= 3;
-        alert("Hint: " + q.hints.textual);
+    const q = state.questions[state.currentIndex];
+    if(type === '50-50' && state.coins >= 5) {
+        state.coins -= 5;
+        alert("It's between: " + q.hints['50-50'].join(" and "));
+    } else if(type === 'textual' && state.coins >= 3) {
+        state.coins -= 3;
+        alert("HINT: " + q.hints.textual);
     } else {
-        alert("Not enough coins!");
+        alert("Not enough coins! Watch an ad?");
     }
-    localStorage.setItem('total_coins', coins);
-    updateDisplay();
-        }
+    updateProfile();
+}
+
+function vibrate(pattern) {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+}
